@@ -1,4 +1,4 @@
-var musicaAmbiente = new Audio("res/musica_ambiente.mp3");
+var musicaAmbiente = new Audio("res/bgm.mp3");
 musicaAmbiente.loop = true;
 
 var efectos = {

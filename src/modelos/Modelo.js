@@ -8,6 +8,10 @@ class Modelo {
         this.alto = this.imagen.height;
     }
 
+    actualizar(){
+        
+    }
+
     dibujar (){
         contexto.drawImage(this.imagen,
             this.x - this.imagen.width/2,

@@ -27,3 +27,6 @@ orientaciones.izquierda = 3;
 
 var canvasWidth = 480;
 var canvasHeight = 320;
+
+var tileWidth = 18;
+var tileHeight = 15;

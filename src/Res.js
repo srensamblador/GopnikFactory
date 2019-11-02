@@ -6,7 +6,15 @@ var imagenes = {
     conveyor_left: "res/conveyor_left.png",
     conveyor_right: "res/conveyor_right.png",
     conveyor: "res/conveyor.png",
-    fondo: "res/fondo.png"
+    fondo: "res/fondo.png",
+    middle_machine: "res/machine.png",
+    gopnik: "res/gopnik.png",
+    boris_idle: "res/boris_idle.png",
+    boris_squat: "res/boris_squat.png",
+    boris_stand: "res/boris_stand.png",
+    anatoli_idle: "res/anatoli_idle.png",
+    anatoli_squat: "res/anatoli_squat.png",
+    anatoli_stand: "res/anatoli_stand.png"
 };
 
 var rutasImagenes = Object.values(imagenes);
