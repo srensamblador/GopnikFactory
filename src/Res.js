@@ -14,7 +14,9 @@ var imagenes = {
     boris_stand: "res/boris_stand.png",
     anatoli_idle: "res/anatoli_idle.png",
     anatoli_squat: "res/anatoli_squat.png",
-    anatoli_stand: "res/anatoli_stand.png"
+    anatoli_stand: "res/anatoli_stand.png",
+    caja: "res/box.png",
+    caja_deluxe: "res/box_deluxe.png"
 };
 
 var rutasImagenes = Object.values(imagenes);

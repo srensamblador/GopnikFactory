@@ -15,16 +15,13 @@ function onKeyDown( event) {
                 controles.continuar = true;
                 break;
             case 38:
-                controles.moverY = 1;
+                controles.moverAnatoliY = 1;
                 break;
             case 40:
-                controles.moverY = -1;
+                controles.moverAnatoliY = -1;
                 break;
-            case 39:
-                controles.moverX = 1;
-                break;
-            case 37:
-                controles.moverX = -1;
+            default:
+                console.log(event.keyCode);
                 break;
         }
     }
