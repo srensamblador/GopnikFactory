@@ -79,7 +79,7 @@ class Jugador extends Modelo {
     }
   }
 
-  cogerCaja(caja, origen, destino) {
+  cogerCaja(caja, origen, destino, sentido) {
     if (caja.x == origen.x && caja.y + caja.alto / 2 == origen.y) {
         console.log("caja en posición")
       // Caja en el punto adecuado
@@ -87,7 +87,7 @@ class Jugador extends Modelo {
       console.log("Jugador y:" + (this.y + this.alto/2)+ " y_2: " + (this.y + tileHeight))
       if (this.y  + this.alto/2== origen.y|| this.y + tileHeight== origen.y) {
         // Misma fila o la de abajo
-        caja.mover(destino);
+        caja.mover(destino, sentido);
       }
     }
   }

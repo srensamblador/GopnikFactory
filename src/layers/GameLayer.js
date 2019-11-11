@@ -56,13 +56,19 @@ class GameLayer extends Layer {
     }
 
     // Colisión caja, jugador
-    for (const k in this.posiciones_cajas){
-        const origen = this.posiciones_cajas[k].origen;
-        for (var i = 0; i < this.cajas.length; i++){
-            const destino = this.posiciones_cajas[k].destino;
-            this.boris.cogerCaja(this.cajas[i], origen, destino)
-            this.anatoli.cogerCaja(this.cajas[i], origen, destino)
+    // TODO cambiar a listas de origenes y destinos
+    for (const k in this.posiciones_cajas) {
+      const origen = this.posiciones_cajas[k].origen;
+      for (var i = 0; i < this.cajas.length; i++) {
+        const destino = this.posiciones_cajas[k].destino;
+        var sentido = -1;
+        var keys = Object.keys(this.posiciones_cajas).sort()
+        if (k == keys[keys.length -1] || k == keys[0]) {
+          sentido = 1;
         }
+        this.boris.cogerCaja(this.cajas[i], origen, destino, sentido);
+        this.anatoli.cogerCaja(this.cajas[i], origen, destino, sentido);
+      }
     }
   }
 
@@ -99,22 +105,22 @@ class GameLayer extends Layer {
     if (controles.moverBorisY > 0) {
       this.boris.mover(1);
       controles.moverBorisY = 0;
-      console.log(this.boris.y + this.boris.alto/2);
+      console.log(this.boris.y + this.boris.alto / 2);
     }
     if (controles.moverBorisY < 0) {
       this.boris.mover(-1);
       controles.moverBorisY = 0;
-      console.log(this.boris.y + this.boris.alto/2);
+      console.log(this.boris.y + this.boris.alto / 2);
     }
     if (controles.moverAnatoliY > 0) {
       this.anatoli.mover(1);
       controles.moverAnatoliY = 0;
-      console.log(this.anatoli.y + this.anatoli.alto/2);
+      console.log(this.anatoli.y + this.anatoli.alto / 2);
     }
     if (controles.moverAnatoliY < 0) {
       this.anatoli.mover(-1);
       controles.moverAnatoliY = 0;
-      console.log(this.anatoli.y + this.anatoli.alto/2);
+      console.log(this.anatoli.y + this.anatoli.alto / 2);
     }
   }
 
@@ -167,33 +173,40 @@ class GameLayer extends Layer {
         this.conveyors.push(conveyor);
         this.espacio.agregarCuerpoEstatico(conveyor);
         break;
-      case "A":
-        this.posiciones_a.push({ x, y });
-        break;
-      case "B":
+      case "1":
         this.posiciones_b.push({ x, y });
         break;
-      case "G":
+      case "2":
+        this.posiciones_a.push({ x, y });
+        break;
+      case "X":
         var caja = new Caja(x, y);
         caja.y = caja.y - caja.alto / 2;
         this.cajas.push(caja);
         this.espacio.agregarCuerpoDinamico(caja);
         break;
-      case "1":
-      case "2":
-      case "3":
-      case "4":
-      case "5":
-      case "6":
-      case "7":
-      case "8":
-      case "9":
+      case "a":
+      case "b":
+      case "c":
+      case "d":
+      case "e":
+      case "f":
         if (!(simbolo in this.posiciones_cajas)) {
           this.posiciones_cajas[simbolo] = {};
-          this.posiciones_cajas[simbolo].origen = { x, y };
-        } else {
-          this.posiciones_cajas[simbolo].destino = { x, y };
         }
+        this.posiciones_cajas[simbolo].origen = { x, y };
+        break;
+      case "A":
+      case "B":
+      case "C":
+      case "D":
+      case "E":
+      case "F":
+        var lowerSimbolo = simbolo.toLowerCase();
+        if (!(lowerSimbolo in this.posiciones_cajas)) {
+          this.posiciones_cajas[lowerSimbolo] = {};
+        }
+        this.posiciones_cajas[lowerSimbolo].destino = { x, y };
         break;
       /*
             case "1":
