@@ -14,6 +14,12 @@ function onKeyDown( event) {
                 controles.disparo = true;
                 controles.continuar = true;
                 break;
+            case 83:
+                controles.moverBorisY = -1;
+                break;
+            case 87:
+                controles.moverBorisY = 1;
+                break;
             case 38:
                 controles.moverAnatoliY = 1;
                 break;
@@ -21,9 +27,10 @@ function onKeyDown( event) {
                 controles.moverAnatoliY = -1;
                 break;
             default:
-                console.log(event.keyCode);
+                //console.log(event.keyCode);
                 break;
         }
+        console.log(event.keyCode);
     }
 
 }

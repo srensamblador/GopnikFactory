@@ -10,6 +10,8 @@ class GameLayer extends Layer {
         this.espacio = new Espacio(1);
 
         this.conveyors = []
+        this.positions_a = []
+        this.positions_b = []
 
         this.fondo = new Fondo(imagenes.fondo, canvasWidth*0.5, canvasHeight*0.5);
         this.machine = new Fondo(imagenes.middle_machine, canvasWidth*0.5, canvasHeight*0.5)
@@ -59,8 +61,24 @@ class GameLayer extends Layer {
         if (controles.continuar){
             controles.continuar = false;
             this.pausa = false;
-        }     
-
+        }
+        
+        if (controles.moverBorisY > 0){
+            this.boris.mover(1);
+            controles.moverBorisY = 0;
+        }
+        if (controles.moverBorisY < 0){
+            this.boris.mover(-1);
+            controles.moverBorisY = 0;
+        }
+        if (controles.moverAnatoliY > 0){
+            this.anatoli.mover(1);
+            controles.moverAnatoliY = 0;
+        }
+        if (controles.moverAnatoliY < 0){
+            this.anatoli.mover(-1);
+            controles.moverAnatoliY = 0;
+        }
     }
 
     cargarMapa(ruta) {
@@ -73,7 +91,7 @@ class GameLayer extends Layer {
             var lineas = texto.split('\n');
             this.altoMapa = (lineas.length) * tileHeight;
             this.anchoMapa = (lineas[0].length - 1) * tileWidth;
-            for (var i = 0; i < lineas.length; i++) {
+            for (var i = lineas.length -1; i >= 0; i--) {
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++) {
                     var simbolo = linea[j];
@@ -82,6 +100,8 @@ class GameLayer extends Layer {
                     this.cargarObjetoMapa(simbolo, x, y);
                 }
             }
+            this.boris = new Jugador(1, this.positions_b);
+            this.anatoli = new Jugador(2, this.positions_a);
         }.bind(this);
 
         fichero.send(null);
@@ -107,6 +127,13 @@ class GameLayer extends Layer {
                 this.conveyors.push(conveyor);
                 this.espacio.agregarCuerpoEstatico(conveyor);
                 break;
+            case "A":
+                this.positions_a.push({x,y});
+                break;
+            case "B":
+                this.positions_b.push({x,y});
+                break;
+            /*
             case "1":
                 this.boris = new Jugador(1, x, y);
                 this.boris.y = this.boris.y - this.boris.alto/2;
@@ -117,6 +144,7 @@ class GameLayer extends Layer {
                 this.anatoli.y = this.anatoli.y - this.anatoli.alto/2;
                 this.espacio.agregarCuerpoDinamico(this.anatoli);
                 break;
+            */
         }
     }
 
