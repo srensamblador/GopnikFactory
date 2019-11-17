@@ -7,7 +7,7 @@ var imagenes = {
     conveyor_right: "res/conveyor_right.png",
     conveyor: "res/conveyor.png",
     fondo: "res/fondo.png",
-    middle_machine: "res/machine.png",
+    middle_machine: "res/Machine1.png",
     gopnik: "res/gopnik.png",
     boris_idle: "res/boris_idle.png",
     boris_squat: "res/boris_squat.png",
