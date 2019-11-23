@@ -10,6 +10,7 @@ class GameLayer extends Layer {
     this.espacio = new Espacio(1);
     this.stats = new Stats();
 
+    this.platforms = [];
     this.conveyors = [];
     this.posiciones_a = [];
     this.posiciones_b = [];
@@ -22,10 +23,13 @@ class GameLayer extends Layer {
       canvasWidth * 0.5,
       canvasHeight * 0.5
     );
-    this.machine = new Fondo(
-      imagenes.middle_machine,
+    this.machine = new FondoAnimado(
+      imagenes.middle_machine,      
       canvasWidth * 0.5,
-      canvasHeight * 0.5
+      canvasHeight * 0.5,
+      imagenes.middle_machine_sheet,
+      18,
+      3
     );
 
     this.cargarMapa("res/0.txt");
@@ -53,7 +57,7 @@ class GameLayer extends Layer {
 
     // Cajas
     for (var i = 0; i < this.cajas.length; i++) {
-      //this.cajas[i].actualizar();
+      this.cajas[i].actualizar();
     }
 
     // Colisión caja, jugador
@@ -74,18 +78,39 @@ class GameLayer extends Layer {
 
     // Caja llegó a destino
     this.cajasEnDestino();
+
+    // Cajas destruidas
+    console.log(this.cajas)
+    for (var i = 0; i < this.cajas.length; i++){
+        const caja = this.cajas[i];
+        if (caja.estado == estados.muerto){
+            if (!caja.esCocaCola)
+                this.stats.vidas--;
+                console.log(this.stats.vidas);
+            this.cajas.splice(i, 1);
+            this.espacio.eliminarCuerpoDinamico(caja);
+            i = i-1;
+        }
+    }
+
+    // Decoraciones animadas
+    this.machine.actualizar();
+    this.generador.actualizar();
   }
 
   // comprueba si las cajas llegaron a su destino
   cajasEnDestino() {
     for (var i = 0; i < this.cajas.length; i++) {
       const caja = this.cajas[i];
-      if (caja.x == this.destinoCajas.x && caja.y + caja.alto/2 == this.destinoCajas.y){
-          this.stats.puntos += caja.puntos;
-          this.cajas.splice(i, 1);
-          this.espacio.eliminarCuerpoDinamico(caja);
-          i = i -1;
-          console.log("PUNTOS: ",this.stats.puntos);
+      if (
+        caja.x == this.destinoCajas.x &&
+        caja.y + caja.alto / 2 == this.destinoCajas.y
+      ) {
+        this.stats.puntos += caja.puntos;
+        this.cajas.splice(i, 1);
+        this.espacio.eliminarCuerpoDinamico(caja);
+        i = i - 1;
+        console.log("PUNTOS: ", this.stats.puntos);
       }
     }
   }
@@ -96,6 +121,11 @@ class GameLayer extends Layer {
     // Conveyor belts
     for (var i = 0; i < this.conveyors.length; i++) {
       this.conveyors[i].dibujar();
+    }
+
+    // Plataformas
+    for (var i = 0; i < this.platforms.length; i++) {
+      this.platforms[i].dibujar();
     }
 
     // Jugadores
@@ -112,6 +142,8 @@ class GameLayer extends Layer {
     }
 
     this.machine.dibujar();
+    this.truck.dibujar();
+    this.generador.dibujar();
   }
 
   procesarControles() {
@@ -191,6 +223,18 @@ class GameLayer extends Layer {
         this.conveyors.push(conveyor);
         this.espacio.agregarCuerpoEstatico(conveyor);
         break;
+      case "#":
+        var platform = new Platform(imagenes.platform, x, y);
+        platform.y = platform.y - platform.alto / 2;
+        this.platforms.push(platform);
+        this.espacio.agregarCuerpoEstatico(platform);
+        break;
+      case "%":
+        var platform = new Platform(imagenes.platform_double, x, y);
+        platform.y = platform.y - platform.alto / 2;
+        this.platforms.push(platform);
+        this.espacio.agregarCuerpoEstatico(platform);
+        break;
       case "1":
         this.posiciones_b.push({ x, y });
         break;
@@ -226,8 +270,19 @@ class GameLayer extends Layer {
         }
         this.posiciones_cajas[lowerSimbolo].destino = { x, y };
         break;
+      case "0":
+        this.origenCajas = { x, y };
+        this.generador = new FondoAnimado(imagenes.generador, x, y, imagenes.generador_sheet, 18, 3);
+        this.generador.y -= this.generador.alto / 2;
+        break;
       case "$":
-        this.destinoCajas = {x, y}
+        this.destinoCajas = { x, y };
+        break;
+      case "T":
+        this.truck = new Fondo(imagenes.truck, x, y);
+        this.truck.y -= this.truck.alto / 2;
+        this.truck.x -= this.truck.ancho * 0.3;
+        break;
     }
   }
 }

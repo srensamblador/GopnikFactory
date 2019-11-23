@@ -3,13 +3,35 @@ class Caja extends Modelo {
     super(imagenes.caja, x, y);
     this.vx = -1;
     this.vy = 0;
+    this.estado = estados.moviendo;
+
+    this.aMorir = new Animacion(imagenes.caja_morir, this.ancho, this.alto, 12, 3, this.finAnimacionMorir.bind(this));
+
     this.puntos = 10;
   }
 
   actualizar() {
+    if (this.animacion != null){
+      this.animacion.actualizar();
+    }
     if (this.vy > 0) {
       this.vx = 0;
+      this.estado = estados.muriendo;
     }
+    if (this.estado == estados.muriendo && this.vy == 0){
+      this.animacion = this.aMorir;
+    }
+  }
+
+  dibujar(){
+    if (this.animacion != null){
+      this.animacion.dibujar(this.x, this.y);
+    }else{
+      super.dibujar();
+    }
+  }
+  finAnimacionMorir(){
+    this.estado = estados.muerto;
   }
 
   mover(destino, sentido) {

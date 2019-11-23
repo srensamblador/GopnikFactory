@@ -80,12 +80,14 @@ class Jugador extends Modelo {
   }
 
   intentarCogerCaja(caja, origen, destino, sentido) {
-    if (caja.x == origen.x && caja.y + caja.alto / 2 == origen.y) {
+    if (caja.estado == estados.moviendo){
+      if (Math.abs(caja.x - origen.x) < caja.ancho && caja.y + caja.alto/2 == origen.y){
       // Caja en el punto adecuado
       if (this.y  + this.alto/2== origen.y|| this.y + tileHeight== origen.y) {
         // Jugador y caja alineados
         caja.mover(destino, sentido);
       }
     }
+  }
   }
 }
