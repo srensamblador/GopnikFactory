@@ -8,7 +8,8 @@ var efectos = {
     papali: "res/sfx/papali.mp3",
     coke: "res/sfx/coke.mp3",
     time: "res/sfx/time.mp3",
-    score: "res/sfx/cash.mp3"
+    score: "res/sfx/cash.mp3",
+    alarm: "res/sfx/alarm.mp3"
 }
 
 function reproducirMusica() {

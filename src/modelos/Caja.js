@@ -1,7 +1,7 @@
 class Caja extends Modelo {
   constructor(imagen, x, y) {
     super(imagen, x, y);
-    this.vx = -1;
+    this.vx = -boxSpeed;
     this.vy = 0;
     this.estado = estados.moviendo;
 
@@ -20,6 +20,7 @@ class Caja extends Modelo {
       reproducirEfecto(this.break_sfx);
     }
     if (this.estado == estados.muriendo && this.vy == 0){
+      console.log(this.x, this.y)
       this.animacion = this.aMorir;
     }
   }

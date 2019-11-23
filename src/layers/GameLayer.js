@@ -32,6 +32,13 @@ class GameLayer extends Layer {
       3
     );
 
+    this.fondoPuntos = new Fondo(imagenes.icono_rublos, canvasWidth * 0.88, canvasHeight * 0.05);
+    this.textoPuntos = new Texto(0, canvasWidth * 0.91, canvasHeight * 0.07);
+
+    this.fondoVidas = new Fondo(imagenes.icono_vodka, canvasWidth * 0.75, canvasHeight * 0.05);
+    this.textoVidas = new Texto(0, canvasWidth * 0.78, canvasHeight * 0.07);
+
+
     this.cargarMapa("res/0.txt");
   }
 
@@ -42,8 +49,9 @@ class GameLayer extends Layer {
 
     this.espacio.actualizar();
 
-    // Generar cajas
+    // Generar interactuables
     this.generarCajas();
+    this.generarPickUps();
 
     // Conveyor belts
     for (var i = 0; i < this.conveyors.length; i++) {
@@ -94,9 +102,41 @@ class GameLayer extends Layer {
       }
     }
 
+    // Reloj
+    if (this.reloj != null) {
+      this.reloj.actualizar();
+      if (this.reloj.estado == estados.desactivado &&
+        (this.reloj.colisiona(this.boris) || this.reloj.colisiona(this.anatoli))) {
+        this.reloj.activar(this.cajas);
+      }
+      if (this.reloj.estado == estados.muerto) {
+        this.reloj = null;
+        for (var i = 0; i < this.cajas.length; i++) {
+          console.log("speedup")
+          const caja = this.cajas[i];
+          if (caja.vx < 0)
+            caja.vx = -boxSpeed;
+          else
+            caja.vx = boxSpeed;
+        }
+      }
+    }
+
+    // Pickups
+    if (this.pickup != null){
+      if (this.pickup.colisiona(this.boris) || this.pickup.colisiona(this.anatoli)){
+        this.pickup.activar(this);
+        this.pickup = null;
+      }
+    }
+
     // Decoraciones animadas
     this.machine.actualizar();
     this.generador.actualizar();
+
+    // HUD
+    this.textoPuntos.valor = this.stats.puntos;
+    this.textoVidas.valor = "x " + this.stats.vidas;
   }
 
   // Generación de cajas
@@ -108,7 +148,6 @@ class GameLayer extends Layer {
 
     if (this.iteracionesCajas <= 0) {
       var rng = Math.random();
-      console.log(rng);
       let caja;
       if (rng <= 0.1)
         caja = new CajaDeluxe(this.origenCajas.x, this.origenCajas.y);
@@ -121,9 +160,43 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas =  300 - 2*Math.floor(Math.sqrt(this.stats.puntos));
-      console.log("iterationSpeed", this.iteracionesCajas)
+      this.iteracionesCajas = 300 - 2 * Math.floor(Math.sqrt(this.stats.puntos));
     }
+  }
+
+  // Genera pickups
+  generarPickUps() {
+      var posiciones = this.posiciones_a.concat(this.posiciones_b);
+      if (this.iteracionesPickup == null){
+        this.iteracionesPickup = 0;
+      }
+      this.iteracionesPickup--;
+
+      if (this.pickup == null && this.iteracionesPickup <= 0){
+        do {
+          var random_pos = Math.floor(Math.random() * posiciones.length);
+        } while (
+          (posiciones[random_pos].x == this.anatoli.x && posiciones[random_pos].y == this.anatoli.y + this.anatoli.alto / 2) ||
+          (posiciones[random_pos].x == this.boris.x && posiciones[random_pos].y == this.boris.y + this.boris.alto / 2)
+        )
+
+        var rng = Math.random();
+        console.log("RNG", rng)
+        if (rng <= 0.3){
+          this.pickup = new AntiCoke(posiciones[random_pos].x, posiciones[random_pos].y);
+          this.pickup.y -= this.pickup.alto/2;
+        }
+        else if (rng <= 0.6 && this.stats.vidas < 9){
+          this.pickup = new LifeUp(posiciones[random_pos].x, posiciones[random_pos].y);
+          this.pickup.y -= this.pickup.alto/2;
+        }
+        else if(this.reloj == null){
+          this.reloj = new Reloj(posiciones[random_pos].x, posiciones[random_pos].y)
+          this.reloj.y -= this.reloj.alto/2;
+        }
+
+        this.iteracionesPickup = 120;
+      }      
   }
 
   // comprueba si las cajas llegaron a su destino
@@ -135,11 +208,10 @@ class GameLayer extends Layer {
         caja.y + caja.alto / 2 == this.destinoCajas.y
       ) {
         reproducirEfecto(caja.deliver_sfx);
-        this.stats.puntos += caja.puntos;
+        this.stats.calcularScore(caja.puntos);
         this.cajas.splice(i, 1);
         this.espacio.eliminarCuerpoDinamico(caja);
         i = i - 1;
-        console.log("PUNTOS: ", this.stats.puntos);
       }
     }
   }
@@ -170,9 +242,22 @@ class GameLayer extends Layer {
       this.cajas[i].dibujar();
     }
 
+    // Pickups
+    if (this.reloj != null && this.reloj.estado == estados.desactivado)
+      this.reloj.dibujar();
+    if (this.pickup != null)
+      this.pickup.dibujar();
+
+    // Decoraciones
     this.machine.dibujar();
     this.truck.dibujar();
     this.generador.dibujar();
+
+    // HUD
+    this.fondoPuntos.dibujar();
+    this.textoPuntos.dibujar();
+    this.fondoVidas.dibujar();
+    this.textoVidas.dibujar();
   }
 
   procesarControles() {
@@ -184,22 +269,18 @@ class GameLayer extends Layer {
     if (controles.moverBorisY > 0) {
       this.boris.mover(1);
       controles.moverBorisY = 0;
-      console.log(this.boris.y + this.boris.alto / 2);
     }
     if (controles.moverBorisY < 0) {
       this.boris.mover(-1);
       controles.moverBorisY = 0;
-      console.log(this.boris.y + this.boris.alto / 2);
     }
     if (controles.moverAnatoliY > 0) {
       this.anatoli.mover(1);
       controles.moverAnatoliY = 0;
-      console.log(this.anatoli.y + this.anatoli.alto / 2);
     }
     if (controles.moverAnatoliY < 0) {
       this.anatoli.mover(-1);
       controles.moverAnatoliY = 0;
-      console.log(this.anatoli.y + this.anatoli.alto / 2);
     }
   }
 

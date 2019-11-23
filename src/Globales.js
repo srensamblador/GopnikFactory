@@ -18,6 +18,8 @@ estados.moviendo= 2; // Incluye parado, derecha , izquierda
 estados.actuando = 3;
 estados.muriendo = 4;
 estados.muerto = 5;
+estados.desactivado = 6;
+estados.activado = 7;
 
 var orientaciones = {};
 orientaciones.derecha = 2;
@@ -28,3 +30,7 @@ var canvasHeight = 320;
 
 var tileWidth = 18;
 var tileHeight = 15;
+
+var boxSpeed = 1;
+var boxSpeedNormal = 1;
+var boxSpeedSlow = 0.5;

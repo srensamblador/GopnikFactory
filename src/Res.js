@@ -24,9 +24,14 @@ var imagenes = {
     caja_deluxe_morir: "res/box_deluxe_morir.png",
     caja_cocacola: "res/box_coke.png",
     caja_cocacola_morir: "res/coke_morir.png",
+    anticoke: "res/anticoke.png",
+    lifeup: "res/lifeup.png",
     truck: "res/truck.png",
     generador: "res/generador.png",
-    generador_sheet: "res/generador_sheet.png"
+    generador_sheet: "res/generador_sheet.png",
+    reloj: "res/hourglass.png",
+    icono_vodka: "res/vodka_icon_mini.png",
+    icono_rublos: "res/icono_rublos_mini.png"
 };
 
 var rutasImagenes = Object.values(imagenes);
