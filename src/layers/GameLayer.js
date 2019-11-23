@@ -8,6 +8,7 @@ class GameLayer extends Layer {
   iniciar() {
     reproducirMusica();
     this.espacio = new Espacio(1);
+    this.stats = new Stats();
 
     this.conveyors = [];
     this.posiciones_a = [];
@@ -56,18 +57,35 @@ class GameLayer extends Layer {
     }
 
     // Colisión caja, jugador
-    // TODO cambiar a listas de origenes y destinos
     for (const k in this.posiciones_cajas) {
       const origen = this.posiciones_cajas[k].origen;
       for (var i = 0; i < this.cajas.length; i++) {
         const destino = this.posiciones_cajas[k].destino;
         var sentido = -1;
-        var keys = Object.keys(this.posiciones_cajas).sort()
-        if (k == keys[keys.length -1] || k == keys[0]) {
+        var keys = Object.keys(this.posiciones_cajas).sort();
+        // La carga y descarga de la caja al sistema de cintas no invierte el sentido del movimiento
+        if (k == keys[keys.length - 1] || k == keys[0]) {
           sentido = 1;
         }
-        this.boris.cogerCaja(this.cajas[i], origen, destino, sentido);
-        this.anatoli.cogerCaja(this.cajas[i], origen, destino, sentido);
+        this.boris.intentarCogerCaja(this.cajas[i], origen, destino, sentido);
+        this.anatoli.intentarCogerCaja(this.cajas[i], origen, destino, sentido);
+      }
+    }
+
+    // Caja llegó a destino
+    this.cajasEnDestino();
+  }
+
+  // comprueba si las cajas llegaron a su destino
+  cajasEnDestino() {
+    for (var i = 0; i < this.cajas.length; i++) {
+      const caja = this.cajas[i];
+      if (caja.x == this.destinoCajas.x && caja.y + caja.alto/2 == this.destinoCajas.y){
+          this.stats.puntos += caja.puntos;
+          this.cajas.splice(i, 1);
+          this.espacio.eliminarCuerpoDinamico(caja);
+          i = i -1;
+          console.log("PUNTOS: ",this.stats.puntos);
       }
     }
   }
@@ -208,18 +226,8 @@ class GameLayer extends Layer {
         }
         this.posiciones_cajas[lowerSimbolo].destino = { x, y };
         break;
-      /*
-            case "1":
-                this.boris = new Jugador(1, x, y);
-                this.boris.y = this.boris.y - this.boris.alto/2;
-                this.espacio.agregarCuerpoDinamico(this.boris);
-                break;
-            case "2":
-                this.anatoli = new Jugador(2, x, y);
-                this.anatoli.y = this.anatoli.y - this.anatoli.alto/2;
-                this.espacio.agregarCuerpoDinamico(this.anatoli);
-                break;
-            */
+      case "$":
+        this.destinoCajas = {x, y}
     }
   }
 }

@@ -3,6 +3,7 @@ class Caja extends Modelo {
     super(imagenes.caja, x, y);
     this.vx = -1;
     this.vy = 0;
+    this.puntos = 10;
   }
 
   actualizar() {
