@@ -9,7 +9,8 @@ var efectos = {
     coke: "res/sfx/coke.mp3",
     time: "res/sfx/time.mp3",
     score: "res/sfx/cash.mp3",
-    alarm: "res/sfx/alarm.mp3"
+    alarm: "res/sfx/alarm.mp3",
+    start: "res/sfx/start.mp3"
 }
 
 function reproducirMusica() {
@@ -17,7 +18,8 @@ function reproducirMusica() {
 }
 
 function pararMusica() {
-    musicaAmbiente.stop();
+    musicaAmbiente.pause();
+    musicaAmbiente.currentTime = 0;
 }
 
 function reproducirEfecto( srcEfecto ) {

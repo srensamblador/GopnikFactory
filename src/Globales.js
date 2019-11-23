@@ -1,5 +1,7 @@
 var pulsaciones = []; // actuales registradas
 
+var nivel = 0;
+
 var entradas = {};
 entradas.pulsaciones = 1;
 entradas.teclado = 2;

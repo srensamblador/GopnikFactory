@@ -7,24 +7,34 @@ class MenuLayer extends Layer{
     iniciar() {
         this.fondo =
             new Fondo(imagenes.menu_fondo,canvasWidth*0.5,canvasHeight*0.5);
-        this.boton =
-            new Boton(imagenes.boton_jugar,canvasWidth*0.5,canvasHeight*0.7);
+        this.boton_easy =
+            new Boton(imagenes.boton_easy,canvasWidth*0.5,canvasHeight*0.55);
+        this.boton_normal =
+            new Boton(imagenes.boton_normal,canvasWidth*0.5,canvasHeight*0.75);
     }
 
     calcularPulsaciones(pulsaciones){
-        this.boton.pulsado = false;
+        this.boton_normal.pulsado = false;
+        this.boton_easy.pulsado = false;
 
         for(var i=0; i < pulsaciones.length; i++){
-            if (this.boton.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
-                this.boton.pulsado = true;
+            if (this.boton_normal.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.boton_normal.pulsado = true;
                 if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
                     controles.continuar = true;
+                    nivel = 0;
+                }
+            }
+            else if (this.boton_easy.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.boton_easy.pulsado = true;
+                if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
+                    controles.continuar = true;
+                    nivel = 1;
                 }
             }
         }
 
-        // No pulsado - Botón Disparo
-        if ( !this.boton.pulsado ){
+        if ( !this.boton_normal.pulsado && !this.boton_easy.pulsado){
             controles.continuar = false;
         }
     }
@@ -32,6 +42,7 @@ class MenuLayer extends Layer{
     procesarControles( ) {
         // siguiente pantalla
         if (controles.continuar) {
+            reproducirEfecto(efectos.start);
             gameLayer = new GameLayer();
             layer = gameLayer;
             controles.continuar = false;
@@ -41,6 +52,7 @@ class MenuLayer extends Layer{
 
     dibujar(){
         this.fondo.dibujar();
-        this.boton.dibujar();
+        this.boton_normal.dibujar();
+        this.boton_easy.dibujar();
     }
 }

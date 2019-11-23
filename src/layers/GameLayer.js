@@ -6,7 +6,6 @@ class GameLayer extends Layer {
   }
 
   iniciar() {
-    reproducirMusica();
     this.espacio = new Espacio(1);
     this.stats = new Stats();
 
@@ -17,6 +16,11 @@ class GameLayer extends Layer {
     this.posiciones_cajas = {};
 
     this.cajas = [];
+    this.reloj = null;
+    this.pickup = null;
+    
+    this.iteracionesCajas = 0;
+    this.iteracionesPickup = 300;
 
     this.fondo = new Fondo(
       imagenes.fondo,
@@ -41,14 +45,18 @@ class GameLayer extends Layer {
     this.fondoReloj = new Fondo(imagenes.reloj, canvasWidth * 0.25, canvasHeight * 0.05);
     this.textoReloj = new Texto(0, canvasWidth * 0.28, canvasHeight * 0.07);
 
-    this.cargarMapa("res/0.txt");
+    this.cargarMapa("res/" + nivel + ".txt");
   }
 
   actualizar() {
     if (this.pausa) {
       return;
     }
+    reproducirMusica();
 
+    if (this.stats.vidas <= 0) {
+      this.gameOver();
+    }
     this.espacio.actualizar();
 
     // Generar interactuables
@@ -111,9 +119,9 @@ class GameLayer extends Layer {
         (this.reloj.colisiona(this.boris) || this.reloj.colisiona(this.anatoli))) {
         this.reloj.activar(this.cajas);
       }
-      if (this.reloj.estado == estados.activado){
-        this.textoReloj.valor = "00:" + 
-          ("0" + Math.floor(this.reloj.duration/30)).slice(-2);
+      if (this.reloj.estado == estados.activado) {
+        this.textoReloj.valor = "00:" +
+          ("0" + Math.floor(this.reloj.duration / 30)).slice(-2);
       }
       if (this.reloj.estado == estados.muerto) {
         this.reloj = null;
@@ -124,12 +132,12 @@ class GameLayer extends Layer {
           else
             caja.vx = boxSpeed;
         }
-      }      
+      }
     }
 
     // Pickups
-    if (this.pickup != null){
-      if (this.pickup.colisiona(this.boris) || this.pickup.colisiona(this.anatoli)){
+    if (this.pickup != null) {
+      if (this.pickup.colisiona(this.boris) || this.pickup.colisiona(this.anatoli)) {
         this.pickup.activar(this);
         this.pickup = null;
       }
@@ -172,36 +180,36 @@ class GameLayer extends Layer {
 
   // Genera pickups
   generarPickUps() {
-      var posiciones = this.posiciones_a.concat(this.posiciones_b);
-      if (this.iteracionesPickup == null){
-        this.iteracionesPickup = 300;
+    var posiciones = this.posiciones_a.concat(this.posiciones_b);
+    if (this.iteracionesPickup == null) {
+      this.iteracionesPickup = 300;
+    }
+    this.iteracionesPickup--;
+
+    if (this.pickup == null && this.iteracionesPickup <= 0) {
+      do {
+        var random_pos = Math.floor(Math.random() * posiciones.length);
+      } while (
+        (posiciones[random_pos].x == this.anatoli.x && posiciones[random_pos].y == this.anatoli.y + this.anatoli.alto / 2) ||
+        (posiciones[random_pos].x == this.boris.x && posiciones[random_pos].y == this.boris.y + this.boris.alto / 2)
+      )
+
+      var rng = Math.random();
+      if (rng <= 0.3) {
+        this.pickup = new AntiCoke(posiciones[random_pos].x, posiciones[random_pos].y);
+        this.pickup.y -= this.pickup.alto / 2;
       }
-      this.iteracionesPickup--;
+      else if (rng <= 0.7 && this.stats.vidas < 3) {
+        this.pickup = new LifeUp(posiciones[random_pos].x, posiciones[random_pos].y);
+        this.pickup.y -= this.pickup.alto / 2;
+      }
+      else if (this.reloj == null) {
+        this.reloj = new Reloj(posiciones[random_pos].x, posiciones[random_pos].y)
+        this.reloj.y -= this.reloj.alto / 2;
+      }
 
-      if (this.pickup == null && this.iteracionesPickup <= 0){
-        do {
-          var random_pos = Math.floor(Math.random() * posiciones.length);
-        } while (
-          (posiciones[random_pos].x == this.anatoli.x && posiciones[random_pos].y == this.anatoli.y + this.anatoli.alto / 2) ||
-          (posiciones[random_pos].x == this.boris.x && posiciones[random_pos].y == this.boris.y + this.boris.alto / 2)
-        )
-
-        var rng = Math.random();
-        if (rng <= 0.3){
-          this.pickup = new AntiCoke(posiciones[random_pos].x, posiciones[random_pos].y);
-          this.pickup.y -= this.pickup.alto/2;
-        }
-        else if (rng <= 0.7 && this.stats.vidas < 3){
-          this.pickup = new LifeUp(posiciones[random_pos].x, posiciones[random_pos].y);
-          this.pickup.y -= this.pickup.alto/2;
-        }
-        else if(this.reloj == null){
-          this.reloj = new Reloj(posiciones[random_pos].x, posiciones[random_pos].y)
-          this.reloj.y -= this.reloj.alto/2;
-        }
-
-        this.iteracionesPickup = 600;
-      }      
+      this.iteracionesPickup = 600;
+    }
   }
 
   // comprueba si las cajas llegaron a su destino
@@ -209,7 +217,7 @@ class GameLayer extends Layer {
     for (var i = 0; i < this.cajas.length; i++) {
       const caja = this.cajas[i];
       if (
-        Math.abs(caja.x - this.destinoCajas.x) <= caja.ancho/2 &&
+        Math.abs(caja.x - this.destinoCajas.x) <= caja.ancho / 2 &&
         caja.y + caja.alto / 2 == this.destinoCajas.y
       ) {
         reproducirEfecto(caja.deliver_sfx);
@@ -263,9 +271,31 @@ class GameLayer extends Layer {
     this.textoPuntos.dibujar();
     this.fondoVidas.dibujar();
     this.textoVidas.dibujar();
-    if (this.reloj !=  null && this.reloj.estado == estados.activado){
+    if (this.reloj != null && this.reloj.estado == estados.activado) {
       this.fondoReloj.dibujar();
       this.textoReloj.dibujar();
+    }
+
+    if (this.pausa) {
+      this.mensaje_gameover.dibujar();
+    }
+  }
+
+  gameOver() {
+    this.iniciar();    
+    this.pausa = true;
+    this.mensaje_gameover = new Boton(imagenes.gameover, canvasWidth / 2, canvasHeight / 2);
+    console.log(this)
+  }
+
+  calcularPulsaciones(pulsaciones) {
+    // Suponemos false
+    controles.continuar = false;
+
+    for (var i = 0; i < pulsaciones.length; i++) {
+      if (pulsaciones[i].tipo == tipoPulsacion.inicio) {
+        controles.continuar = true;
+      }
     }
   }
 

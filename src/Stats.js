@@ -1,6 +1,6 @@
 class Stats{
     constructor(){
-        this.vidas = 3;
+        this.vidas = 1;
         this.puntos = 0;
     }
 
