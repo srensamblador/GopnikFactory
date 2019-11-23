@@ -32,7 +32,7 @@ class GameLayer extends Layer {
       3
     );
 
-    this.cargarMapa("res/0.txt");
+    this.cargarMapa("res/1.txt");
   }
 
   actualizar() {
@@ -134,6 +134,7 @@ class GameLayer extends Layer {
         caja.x == this.destinoCajas.x &&
         caja.y + caja.alto / 2 == this.destinoCajas.y
       ) {
+        reproducirEfecto(caja.deliver_sfx);
         this.stats.puntos += caja.puntos;
         this.cajas.splice(i, 1);
         this.espacio.eliminarCuerpoDinamico(caja);

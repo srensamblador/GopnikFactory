@@ -4,5 +4,7 @@ class CajaCoke extends Caja{
         this.puntos = -50;
         this.aMorir = new Animacion(imagenes.caja_cocacola_morir, this.ancho, this.alto, 12, 3, this.finAnimacionMorir.bind(this));
         this.esCocaCola = true;
+        this.deliver_sfx = efectos.coke;
+        this.break_sfx = efectos.glass;
     }
 }
