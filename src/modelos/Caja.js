@@ -1,6 +1,6 @@
 class Caja extends Modelo {
-  constructor(x, y) {
-    super(imagenes.caja, x, y);
+  constructor(imagen, x, y) {
+    super(imagen, x, y);
     this.vx = -1;
     this.vy = 0;
     this.estado = estados.moviendo;

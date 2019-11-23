@@ -242,8 +242,14 @@ class GameLayer extends Layer {
         this.posiciones_a.push({ x, y });
         break;
       case "X":
-        var caja = new Caja(x, y);
+        var caja = new CajaNormal(x, y);
         caja.y = caja.y - caja.alto / 2;
+        this.cajas.push(caja);
+        this.espacio.agregarCuerpoDinamico(caja);
+        break;
+      case "K":
+        var caja = new CajaCoke(x, y);
+        caja.y = caja.y - caja.alto/2;
         this.cajas.push(caja);
         this.espacio.agregarCuerpoDinamico(caja);
         break;

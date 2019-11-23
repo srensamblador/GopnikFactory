@@ -22,6 +22,7 @@ var imagenes = {
     caja_morir: "res/caja_morir.png",
     caja_deluxe: "res/box_deluxe.png",
     caja_cocacola: "res/box_coke.png",
+    caja_cocacola_morir: "res/coke_morir.png",
     truck: "res/truck.png",
     generador: "res/generador.png",
     generador_sheet: "res/generador_sheet.png"
