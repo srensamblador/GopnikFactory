@@ -80,12 +80,11 @@ class GameLayer extends Layer {
     this.cajasEnDestino();
 
     // Cajas destruidas
-    console.log(this.cajas);
     for (var i = 0; i < this.cajas.length; i++) {
       const caja = this.cajas[i];
       if (caja.estado == estados.muerto) {
         if (!caja.esCocaCola) this.stats.vidas--;
-        console.log(this.stats.vidas);
+        console.log("VIDAS: ", this.stats.vidas);
         this.cajas.splice(i, 1);
         this.espacio.eliminarCuerpoDinamico(caja);
         i = i - 1;

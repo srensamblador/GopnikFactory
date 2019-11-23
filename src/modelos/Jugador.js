@@ -22,8 +22,9 @@ class Jugador extends Modelo {
         imagenes.boris_squat,
         this.ancho,
         this.alto,
-        18,
-        3
+        3,
+        3,
+        this.finAccion.bind(this)
       );
       this.aStand = new Animacion(
         imagenes.boris_stand,
@@ -44,8 +45,9 @@ class Jugador extends Modelo {
         imagenes.anatoli_squat,
         this.ancho,
         this.alto,
-        18,
-        3
+        3,
+        3,
+        this.finAccion.bind(this)
       );
       this.aStand = new Animacion(
         imagenes.anatoli_stand,
@@ -64,6 +66,12 @@ class Jugador extends Modelo {
     this.animacion.actualizar();
   }
 
+  finAccion(){
+    this.estado = estados.moviendo;
+    this.animacion = this.aIdle;
+    console.log("EO")
+  }
+
   dibujar() {
     this.animacion.dibujar(this.x, this.y);
   }
@@ -71,7 +79,8 @@ class Jugador extends Modelo {
   mover(sentido) {
     if (
       this.currPos + sentido >= 0 &&
-      this.currPos + sentido < this.posiciones.length
+      this.currPos + sentido < this.posiciones.length &&
+      this.estado == estados.moviendo
     ) {
       this.currPos += sentido;
       this.x = this.posiciones[this.currPos].x;
@@ -85,6 +94,8 @@ class Jugador extends Modelo {
       // Caja en el punto adecuado
       if (this.y  + this.alto/2== origen.y|| this.y + tileHeight== origen.y) {
         // Jugador y caja alineados
+        this.animacion = this.aSquat;
+        this.estado = estados.actuando;
         caja.mover(destino, sentido);
       }
     }
