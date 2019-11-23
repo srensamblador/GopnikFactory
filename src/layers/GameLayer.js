@@ -42,6 +42,9 @@ class GameLayer extends Layer {
 
     this.espacio.actualizar();
 
+    // Generar cajas
+    this.generarCajas();
+
     // Conveyor belts
     for (var i = 0; i < this.conveyors.length; i++) {
       this.conveyors[i].actualizar();
@@ -94,6 +97,33 @@ class GameLayer extends Layer {
     // Decoraciones animadas
     this.machine.actualizar();
     this.generador.actualizar();
+  }
+
+  // Generación de cajas
+  generarCajas() {
+    if (this.iteracionesCajas == null) {
+      this.iteracionesCajas = 0;
+    }
+    this.iteracionesCajas--;
+
+    if (this.iteracionesCajas <= 0) {
+      var rng = Math.random();
+      console.log(rng);
+      let caja;
+      if (rng <= 0.1)
+        caja = new CajaDeluxe(this.origenCajas.x, this.origenCajas.y);
+      else if (rng <= 0.25)
+        caja = new CajaCoke(this.origenCajas.x, this.origenCajas.y);
+      else
+        caja = new CajaNormal(this.origenCajas.x, this.origenCajas.y);
+
+      caja.y = caja.y - caja.alto / 2;
+      this.cajas.push(caja);
+      this.espacio.agregarCuerpoDinamico(caja);
+
+      this.iteracionesCajas =  300 - 2*Math.floor(Math.sqrt(this.stats.puntos));
+      console.log("iterationSpeed", this.iteracionesCajas)
+    }
   }
 
   // comprueba si las cajas llegaron a su destino
@@ -177,7 +207,7 @@ class GameLayer extends Layer {
     var fichero = new XMLHttpRequest();
     fichero.open("GET", ruta, false);
 
-    fichero.onreadystatechange = function() {
+    fichero.onreadystatechange = function () {
       var texto = fichero.responseText;
       var lineas = texto.split("\n");
       this.altoMapa = lineas.length * tileHeight;

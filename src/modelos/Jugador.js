@@ -22,16 +22,17 @@ class Jugador extends Modelo {
         imagenes.boris_squat,
         this.ancho,
         this.alto,
-        3,
+        2,
         3,
         this.finAccion.bind(this)
       );
-      this.aStand = new Animacion(
-        imagenes.boris_stand,
+      this.aAlt = new Animacion(
+        imagenes.grab_alt,
         this.ancho,
         this.alto,
-        18,
-        3
+        2,
+        2,
+        this.finAccion.bind(this)
       );
     } else {
       this.aIdle = new Animacion(
@@ -45,16 +46,17 @@ class Jugador extends Modelo {
         imagenes.anatoli_squat,
         this.ancho,
         this.alto,
-        3,
+        2,
         3,
         this.finAccion.bind(this)
       );
-      this.aStand = new Animacion(
-        imagenes.anatoli_stand,
+      this.aAlt = new Animacion(
+        imagenes.grab_alt,
         this.ancho,
         this.alto,
-        18,
-        3
+        2,
+        2,
+        this.finAccion.bind(this)
       );
     }
 
@@ -66,10 +68,9 @@ class Jugador extends Modelo {
     this.animacion.actualizar();
   }
 
-  finAccion(){
+  finAccion() {
     this.estado = estados.moviendo;
     this.animacion = this.aIdle;
-    console.log("EO")
   }
 
   dibujar() {
@@ -89,17 +90,27 @@ class Jugador extends Modelo {
   }
 
   intentarCogerCaja(caja, origen, destino, sentido) {
-    if (caja.estado == estados.moviendo){
-      if (Math.abs(caja.x - origen.x) < caja.ancho &&
-      caja.y + caja.alto/2 == origen.y){
-      // Caja en el punto adecuado
-      if (this.y  + this.alto/2== origen.y|| this.y + tileHeight== origen.y) {
-        // Jugador y caja alineados
-        this.animacion = this.aSquat;
-        this.estado = estados.actuando;
-        caja.mover(destino, sentido);
+    if (caja.estado == estados.moviendo) {
+      if (
+        Math.abs(caja.x - origen.x) < caja.ancho &&
+        caja.y + caja.alto / 2 == origen.y
+      ) {
+        // Caja en el punto adecuado
+        if (
+          this.y + this.alto / 2 == origen.y ||
+          this.y + tileHeight == origen.y
+        ) {
+          // Jugador y caja alineados
+          if (sentido > 0) {
+            this.animacion = this.aAlt;
+          }
+          else {
+            this.animacion = this.aSquat;
+          }
+          this.estado = estados.actuando;
+          caja.mover(destino, sentido);
+        }
       }
     }
-  }
   }
 }
