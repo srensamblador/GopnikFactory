@@ -32,7 +32,7 @@ class GameLayer extends Layer {
       3
     );
 
-    this.cargarMapa("res/1.txt");
+    this.cargarMapa("res/0.txt");
   }
 
   actualizar() {
