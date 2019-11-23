@@ -24,7 +24,7 @@ class GameLayer extends Layer {
       canvasHeight * 0.5
     );
     this.machine = new FondoAnimado(
-      imagenes.middle_machine,      
+      imagenes.middle_machine,
       canvasWidth * 0.5,
       canvasHeight * 0.5,
       imagenes.middle_machine_sheet,
@@ -80,17 +80,16 @@ class GameLayer extends Layer {
     this.cajasEnDestino();
 
     // Cajas destruidas
-    console.log(this.cajas)
-    for (var i = 0; i < this.cajas.length; i++){
-        const caja = this.cajas[i];
-        if (caja.estado == estados.muerto){
-            if (!caja.esCocaCola)
-                this.stats.vidas--;
-                console.log(this.stats.vidas);
-            this.cajas.splice(i, 1);
-            this.espacio.eliminarCuerpoDinamico(caja);
-            i = i-1;
-        }
+    console.log(this.cajas);
+    for (var i = 0; i < this.cajas.length; i++) {
+      const caja = this.cajas[i];
+      if (caja.estado == estados.muerto) {
+        if (!caja.esCocaCola) this.stats.vidas--;
+        console.log(this.stats.vidas);
+        this.cajas.splice(i, 1);
+        this.espacio.eliminarCuerpoDinamico(caja);
+        i = i - 1;
+      }
     }
 
     // Decoraciones animadas
@@ -249,7 +248,13 @@ class GameLayer extends Layer {
         break;
       case "K":
         var caja = new CajaCoke(x, y);
-        caja.y = caja.y - caja.alto/2;
+        caja.y = caja.y - caja.alto / 2;
+        this.cajas.push(caja);
+        this.espacio.agregarCuerpoDinamico(caja);
+        break;
+      case "€":
+        var caja = new CajaDeluxe(x, y);
+        caja.y = caja.y - caja.alto / 2;
         this.cajas.push(caja);
         this.espacio.agregarCuerpoDinamico(caja);
         break;
@@ -278,7 +283,14 @@ class GameLayer extends Layer {
         break;
       case "0":
         this.origenCajas = { x, y };
-        this.generador = new FondoAnimado(imagenes.generador, x, y, imagenes.generador_sheet, 18, 3);
+        this.generador = new FondoAnimado(
+          imagenes.generador,
+          x,
+          y,
+          imagenes.generador_sheet,
+          18,
+          3
+        );
         this.generador.y -= this.generador.alto / 2;
         break;
       case "$":

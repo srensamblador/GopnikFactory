@@ -21,6 +21,8 @@ var imagenes = {
     caja: "res/box.png",
     caja_morir: "res/caja_morir.png",
     caja_deluxe: "res/box_deluxe.png",
+    caja_deluxe_idle: "res/box_deluxe_idle.png",
+    caja_deluxe_morir: "res/box_deluxe_morir.png",
     caja_cocacola: "res/box_coke.png",
     caja_cocacola_morir: "res/coke_morir.png",
     truck: "res/truck.png",
