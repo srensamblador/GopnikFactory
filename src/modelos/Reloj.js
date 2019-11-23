@@ -2,7 +2,7 @@ class Reloj extends Modelo {
     constructor(x, y) {
         super(imagenes.reloj, x, y);
         this.sfx = efectos.time;
-        this.duration = 100;
+        this.duration = 300;
         this.estado = estados.desactivado;
     }
 

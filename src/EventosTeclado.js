@@ -30,7 +30,6 @@ function onKeyDown( event) {
                 //console.log(event.keyCode);
                 break;
         }
-        console.log(event.keyCode);
     }
 
 }

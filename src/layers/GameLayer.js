@@ -38,6 +38,8 @@ class GameLayer extends Layer {
     this.fondoVidas = new Fondo(imagenes.icono_vodka, canvasWidth * 0.75, canvasHeight * 0.05);
     this.textoVidas = new Texto(0, canvasWidth * 0.78, canvasHeight * 0.07);
 
+    this.fondoReloj = new Fondo(imagenes.reloj, canvasWidth * 0.25, canvasHeight * 0.05);
+    this.textoReloj = new Texto(0, canvasWidth * 0.28, canvasHeight * 0.07);
 
     this.cargarMapa("res/0.txt");
   }
@@ -109,17 +111,20 @@ class GameLayer extends Layer {
         (this.reloj.colisiona(this.boris) || this.reloj.colisiona(this.anatoli))) {
         this.reloj.activar(this.cajas);
       }
+      if (this.reloj.estado == estados.activado){
+        this.textoReloj.valor = "00:" + 
+          ("0" + Math.floor(this.reloj.duration/30)).slice(-2);
+      }
       if (this.reloj.estado == estados.muerto) {
         this.reloj = null;
         for (var i = 0; i < this.cajas.length; i++) {
-          console.log("speedup")
           const caja = this.cajas[i];
           if (caja.vx < 0)
             caja.vx = -boxSpeed;
           else
             caja.vx = boxSpeed;
         }
-      }
+      }      
     }
 
     // Pickups
@@ -160,7 +165,8 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas = 300 - 2 * Math.floor(Math.sqrt(this.stats.puntos));
+      this.iteracionesCajas = 350 - 5 * Math.floor(Math.sqrt(this.stats.puntos));
+      console.log("iteraciones", this.iteracionesCajas)
     }
   }
 
@@ -168,7 +174,7 @@ class GameLayer extends Layer {
   generarPickUps() {
       var posiciones = this.posiciones_a.concat(this.posiciones_b);
       if (this.iteracionesPickup == null){
-        this.iteracionesPickup = 0;
+        this.iteracionesPickup = 300;
       }
       this.iteracionesPickup--;
 
@@ -181,12 +187,11 @@ class GameLayer extends Layer {
         )
 
         var rng = Math.random();
-        console.log("RNG", rng)
         if (rng <= 0.3){
           this.pickup = new AntiCoke(posiciones[random_pos].x, posiciones[random_pos].y);
           this.pickup.y -= this.pickup.alto/2;
         }
-        else if (rng <= 0.6 && this.stats.vidas < 9){
+        else if (rng <= 0.7 && this.stats.vidas < 3){
           this.pickup = new LifeUp(posiciones[random_pos].x, posiciones[random_pos].y);
           this.pickup.y -= this.pickup.alto/2;
         }
@@ -195,7 +200,7 @@ class GameLayer extends Layer {
           this.reloj.y -= this.reloj.alto/2;
         }
 
-        this.iteracionesPickup = 120;
+        this.iteracionesPickup = 600;
       }      
   }
 
@@ -204,7 +209,7 @@ class GameLayer extends Layer {
     for (var i = 0; i < this.cajas.length; i++) {
       const caja = this.cajas[i];
       if (
-        caja.x == this.destinoCajas.x &&
+        Math.abs(caja.x - this.destinoCajas.x) <= caja.ancho/2 &&
         caja.y + caja.alto / 2 == this.destinoCajas.y
       ) {
         reproducirEfecto(caja.deliver_sfx);
@@ -258,6 +263,10 @@ class GameLayer extends Layer {
     this.textoPuntos.dibujar();
     this.fondoVidas.dibujar();
     this.textoVidas.dibujar();
+    if (this.reloj !=  null && this.reloj.estado == estados.activado){
+      this.fondoReloj.dibujar();
+      this.textoReloj.dibujar();
+    }
   }
 
   procesarControles() {
@@ -307,7 +316,6 @@ class GameLayer extends Layer {
       this.boris.y -= this.boris.alto / 2;
       this.anatoli = new Jugador(2, this.posiciones_a);
       this.anatoli.y -= this.anatoli.alto / 2;
-      console.log(this.posiciones_cajas);
     }.bind(this);
 
     fichero.send(null);
