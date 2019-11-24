@@ -11,7 +11,6 @@ var imagenes = {
     conveyor_right: "res/conveyor_right.png",
     conveyor: "res/conveyor.png",
     platform: "res/platform.png",
-    platform_double: "res/platform2.png",
     fondo: "res/fondo.png",
     middle_machine: "res/machine.png",
     middle_machine_sheet: "res/machine_sheet.png",

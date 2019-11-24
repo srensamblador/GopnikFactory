@@ -289,11 +289,12 @@ class GameLayer extends Layer {
     }
   }
 
-  gameOver() {
+  gameOver() {    
+    var finalScore = this.stats.puntos;
     this.iniciar();
     this.pausa = true;
     this.mensaje_gameover = new Boton(imagenes.gameover, canvasWidth / 2, canvasHeight / 2);
-    this.texto_score = new Texto("You earned " +  this.stats.puntos + " ₽", canvasWidth * 0.05, canvasHeight*0.92);
+    this.texto_score = new Texto("You earned " +  finalScore + " ₽", canvasWidth * 0.05, canvasHeight*0.92);
     this.texto_score.color = "#eed505";
   }
 

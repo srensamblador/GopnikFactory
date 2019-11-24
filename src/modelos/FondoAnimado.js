@@ -2,7 +2,6 @@ class FondoAnimado extends Modelo{
     constructor(rutaImagen, x, y, rutaSpriteSheet, refresh, frames) {
         super(rutaImagen, x, y)
         this.vx = 0;
-        console.log(this)
         this.aIdle = new Animacion(rutaSpriteSheet,
             this.ancho, this.alto, refresh, frames);
         this.animacion = this.aIdle;
