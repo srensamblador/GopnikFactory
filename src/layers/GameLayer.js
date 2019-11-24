@@ -309,7 +309,10 @@ class GameLayer extends Layer {
       controles.continuar = false;
       this.pausa = false;
     }
-
+    if (controles.pausar){
+      controles.pausar = false;
+      this.pausa = !this.pausa;
+    }
     if (controles.moverBorisY > 0) {
       this.boris.mover(1);
       controles.moverBorisY = 0;

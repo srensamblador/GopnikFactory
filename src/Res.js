@@ -6,6 +6,7 @@ var imagenes = {
     tutorial: "res/tutorial.png",
     boton_normal : "res/boton_normal.png",
     boton_easy: "res/boton_easy.png",
+    selector_modo: "res/mode_selector.png",
     conveyor_left: "res/conveyor_left.png",
     conveyor_right: "res/conveyor_right.png",
     conveyor: "res/conveyor.png",
