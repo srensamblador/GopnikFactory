@@ -312,6 +312,8 @@ class GameLayer extends Layer {
   procesarControles() {
     if (controles.continuar) {
       controles.continuar = false;
+      if (this.mensaje_gameover != null)
+        this.mensaje_gameover = null;
       this.pausa = false;
     }
     if (controles.pausar){
