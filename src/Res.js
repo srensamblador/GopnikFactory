@@ -3,6 +3,7 @@ var cache = [];
 var imagenes = {
     menu_fondo : "res/menu_fondo.png",
     gameover: "res/gameover.png",
+    tutorial: "res/tutorial.png",
     boton_normal : "res/boton_normal.png",
     boton_easy: "res/boton_easy.png",
     conveyor_left: "res/conveyor_left.png",

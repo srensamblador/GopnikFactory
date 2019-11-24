@@ -1,7 +1,8 @@
 class GameLayer extends Layer {
   constructor() {
     super();
-    this.pausa = false;
+    this.pausa = true;
+    this.mensaje_tutorial = new Boton(imagenes.tutorial, canvasWidth / 2, canvasHeight / 2);
     this.iniciar();
   }
 
@@ -18,7 +19,7 @@ class GameLayer extends Layer {
     this.cajas = [];
     this.reloj = null;
     this.pickup = null;
-    
+
     this.iteracionesCajas = 0;
     this.iteracionesPickup = 300;
 
@@ -44,6 +45,8 @@ class GameLayer extends Layer {
 
     this.fondoReloj = new Fondo(imagenes.reloj, canvasWidth * 0.25, canvasHeight * 0.05);
     this.textoReloj = new Texto(0, canvasWidth * 0.28, canvasHeight * 0.07);
+
+    this.mensaje_gameover = null;
 
     this.cargarMapa("res/" + nivel + ".txt");
   }
@@ -105,7 +108,6 @@ class GameLayer extends Layer {
       const caja = this.cajas[i];
       if (caja.estado == estados.muerto) {
         if (!caja.esCocaCola) this.stats.vidas--;
-        console.log("VIDAS: ", this.stats.vidas);
         this.cajas.splice(i, 1);
         this.espacio.eliminarCuerpoDinamico(caja);
         i = i - 1;
@@ -174,7 +176,6 @@ class GameLayer extends Layer {
       this.espacio.agregarCuerpoDinamico(caja);
 
       this.iteracionesCajas = 350 - 5 * Math.floor(Math.sqrt(this.stats.puntos));
-      console.log("iteraciones", this.iteracionesCajas)
     }
   }
 
@@ -277,15 +278,19 @@ class GameLayer extends Layer {
     }
 
     if (this.pausa) {
-      this.mensaje_gameover.dibujar();
+      if (this.mensaje_gameover != null) {
+        this.mensaje_gameover.dibujar();
+      }
+      else {
+        this.mensaje_tutorial.dibujar();
+      }
     }
   }
 
   gameOver() {
-    this.iniciar();    
+    this.iniciar();
     this.pausa = true;
     this.mensaje_gameover = new Boton(imagenes.gameover, canvasWidth / 2, canvasHeight / 2);
-    console.log(this)
   }
 
   calcularPulsaciones(pulsaciones) {
