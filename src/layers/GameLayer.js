@@ -47,6 +47,7 @@ class GameLayer extends Layer {
     this.textoReloj = new Texto(0, canvasWidth * 0.28, canvasHeight * 0.07);
 
     this.mensaje_gameover = null;
+    this.texto_score = null;
 
     this.cargarMapa("res/" + nivel + ".txt");
   }
@@ -280,6 +281,7 @@ class GameLayer extends Layer {
     if (this.pausa) {
       if (this.mensaje_gameover != null) {
         this.mensaje_gameover.dibujar();
+        this.texto_score.dibujar();
       }
       else {
         this.mensaje_tutorial.dibujar();
@@ -291,6 +293,8 @@ class GameLayer extends Layer {
     this.iniciar();
     this.pausa = true;
     this.mensaje_gameover = new Boton(imagenes.gameover, canvasWidth / 2, canvasHeight / 2);
+    this.texto_score = new Texto("You earned " +  this.stats.puntos + " ₽", canvasWidth * 0.05, canvasHeight*0.92);
+    this.texto_score.color = "#eed505";
   }
 
   calcularPulsaciones(pulsaciones) {

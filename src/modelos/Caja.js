@@ -20,7 +20,6 @@ class Caja extends Modelo {
       reproducirEfecto(this.break_sfx);
     }
     if (this.estado == estados.muriendo && this.vy == 0){
-      console.log(this.x, this.y)
       this.animacion = this.aMorir;
     }
   }

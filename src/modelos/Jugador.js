@@ -9,7 +9,6 @@ class Jugador extends Modelo {
     this.currPos = 0; // Índice actual en la lista de posiciones
 
     this.posiciones = posiciones;
-    console.log(player_number, posiciones);
     if (player_number === 1) {
       this.aIdle = new Animacion(
         imagenes.boris_idle,
