@@ -20,6 +20,7 @@ class GameLayer extends Layer {
     this.reloj = null;
     this.pickup = null;
 
+    this.dificultadActual = 1;
     this.iteracionesCajas = 0;
     this.iteracionesPickup = 300;
 
@@ -58,10 +59,28 @@ class GameLayer extends Layer {
     }
     reproducirMusica();
 
+    // Condición derrota
     if (this.stats.vidas <= 0) {
       this.gameOver();
     }
     this.espacio.actualizar();
+
+    //Box speed dificultad
+    if (this.stats.puntos >= 500*this.dificultadActual){
+      console.log("DIFF UP")
+      this.dificultadActual++;
+      boxSpeedNormal += 0.05;
+      boxSpeedSlow += 0.05;
+      boxSpeed += 0.10;
+
+      for (const caja of this.cajas){
+        if (caja.vx > 0){
+          caja.vx = boxSpeed;
+        }else{
+          caja.vx = -boxSpeed;
+        }
+      }
+    }
 
     // Generar interactuables
     this.generarCajas();
@@ -176,7 +195,7 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas = 350 - 5 * Math.floor(Math.sqrt(this.stats.puntos));
+      this.iteracionesCajas = 350 - this.stats.puntos/5;
     }
   }
 
