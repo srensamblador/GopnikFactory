@@ -66,7 +66,7 @@ class GameLayer extends Layer {
     this.espacio.actualizar();
 
     //Box speed dificultad
-    if (this.stats.puntos >= 500*this.dificultadActual){
+    if (this.stats.puntos >= 250*this.dificultadActual){
       console.log("DIFF UP")
       this.dificultadActual++;
       boxSpeedNormal += 0.10;
@@ -195,7 +195,7 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas = 350 - this.stats.puntos/5;
+      this.iteracionesCajas = 350 - this.stats.puntos/4;
     }
   }
 
