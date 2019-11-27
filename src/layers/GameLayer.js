@@ -69,8 +69,8 @@ class GameLayer extends Layer {
     if (this.stats.puntos >= 500*this.dificultadActual){
       console.log("DIFF UP")
       this.dificultadActual++;
-      boxSpeedNormal += 0.05;
-      boxSpeedSlow += 0.05;
+      boxSpeedNormal += 0.10;
+      boxSpeedSlow += 0.10;
       boxSpeed += 0.10;
 
       for (const caja of this.cajas){
