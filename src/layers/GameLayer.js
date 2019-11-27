@@ -184,9 +184,9 @@ class GameLayer extends Layer {
     if (this.iteracionesCajas <= 0) {
       var rng = Math.random();
       let caja;
-      if (rng <= 0.1)
+      if (rng <= 0.2)
         caja = new CajaDeluxe(this.origenCajas.x, this.origenCajas.y);
-      else if (rng <= 0.25)
+      else if (rng <= 0.4)
         caja = new CajaCoke(this.origenCajas.x, this.origenCajas.y);
       else
         caja = new CajaNormal(this.origenCajas.x, this.origenCajas.y);
@@ -195,7 +195,7 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas = 240 - this.stats.puntos/5;
+      this.iteracionesCajas = Math.max(90, 240 - this.stats.puntos/5);
     }
   }
 
