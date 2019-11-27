@@ -195,7 +195,7 @@ class GameLayer extends Layer {
       this.cajas.push(caja);
       this.espacio.agregarCuerpoDinamico(caja);
 
-      this.iteracionesCajas = Math.max(90, 240 - this.stats.puntos/5);
+      this.iteracionesCajas = Math.max(60, 240 - this.stats.puntos/5);
     }
   }
 
