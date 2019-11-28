@@ -20,9 +20,14 @@ class GameLayer extends Layer {
     this.reloj = null;
     this.pickup = null;
 
-    this.dificultadActual = 1;
     this.iteracionesCajas = 0;
     this.iteracionesPickup = 300;
+
+    // Reset dificultad
+    this.dificultadActual = 1;
+    boxSpeed = 1;
+    boxSpeedNormal = 1;
+    boxSpeedSlow = 0.5;
 
     this.fondo = new Fondo(
       imagenes.fondo,
@@ -67,7 +72,6 @@ class GameLayer extends Layer {
 
     //Box speed dificultad
     if (this.stats.puntos >= 250*this.dificultadActual){
-      console.log("DIFF UP")
       this.dificultadActual++;
       boxSpeedNormal += 0.10;
       boxSpeedSlow += 0.10;
