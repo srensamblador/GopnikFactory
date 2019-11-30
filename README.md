@@ -1,20 +1,18 @@
 # GopnikFactory
 Gopnik themed version of Game&amp;Watch's Mario Bros
 
-
+## Changelog
+### v1.0
+* Boxes gain 10% speed every 250 points
+* Initially boxes are generated every 8 seconds. The more points you get the faster they generate. Every 150 points shaves one second. Minimum generation speed is 2 seconds.
+* Coke box and Chernobyl box ratio upped to 20% each.
 
 ## Credits
-### Cut Russian audio engineering
-@wolfwalker333
+2D art made by:
+* @WolfWalker333
+* CrowZaskelimil
+* Yeboi
+* BarrelBoy
 
-### Cheap slav labor (Kosovian artists inc.)
-@wolfwalker333
-a bulgarian
-a fking weeb
-dunno what else, some guy making vodka ui icons or something
-
-## Budget allocation
-* Art department : 0 shits
-* Music department: LULZ just ripped S.T.A.L.K.E.R. mp3
-* Developer coffee: 3.50€
-* Rest of the budget: hoes and blackjack for mr developer
+## Disclaimer
+This game is made for a school asignment and is never intended to be published in any platform or used for profit in any way. 
